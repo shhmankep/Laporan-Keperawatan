@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Laporan Harian Kepala Ruangan</title>
+<style>
+:root{--ink:#0f2e3d;--mut:#4f6b78;--teal:#1565d8;--mint:#e3f8ec;--grn:#22c55e;--gd:#16b364;--bg:#ffffff;--line:#e3ebf5;--or:#f59e0b;--pu:#7c4dff;--cy:#06b6d4;--sh:0 2px 12px rgba(21,101,216,.09);--red:#c4452d;--amb:#b7791f;--w:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:70px}
+header{background:var(--w);box-shadow:var(--sh);color:var(--ink);padding:calc(8px + env(safe-area-inset-top)) 16px 8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:4px solid var(--grn)}
+header img{height:42px;width:auto;display:block}header h1{font-size:17px;margin:0;flex:1;min-width:170px;line-height:1.25;color:var(--teal);padding-left:14px;border-left:1px solid var(--line)}header small{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.hb{font:inherit;font-size:13px;font-weight:700;border:0;border-radius:8px;padding:8px 14px;color:#fff;cursor:pointer;background:var(--teal)}.hb.g{background:var(--gd)}
+#pill{font-size:12px;padding:5px 11px;border-radius:99px;background:#f3f6fa;border:1px solid var(--line);color:var(--mut);font-weight:600;cursor:pointer}#pill:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--grn);margin-right:6px}
+#pill.bad{color:#b4321c;background:#fdeceb}#pill.bad:before{background:var(--red)}#pill.wait{color:#8a5a00;background:#fff6e0}#pill.wait:before{background:var(--or)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--w);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;border:0;background:none;padding:13px 4px;font:inherit;font-weight:600;color:var(--mut);border-top:3px solid transparent}
+nav button.on{color:var(--teal);border-top-color:var(--teal)}
+main{max-width:1000px;margin:0 auto;padding:14px}section{display:none}section.on{display:block}
+h2{font-size:16px;margin:20px 0 8px;padding-bottom:4px;color:var(--teal);border-bottom:2px solid var(--grn)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+input,select,textarea,button.b{font:inherit;color:inherit}
+input:not([type=radio]),select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--w);margin-top:3px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+label{display:block;font-size:13px;color:var(--mut);font-weight:600}
+.bar input[type=date]{width:auto}
+.b{padding:10px 16px;border-radius:8px;border:1px solid var(--teal);background:var(--teal);color:#fff;font-weight:600;cursor:pointer}.b.o{background:var(--w);color:var(--teal)}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.sum div{--c:var(--teal);background:var(--w);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;box-shadow:var(--sh);padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mut)}.sum b{display:block;font-size:30px;line-height:1.15;font-weight:800;letter-spacing:0;color:var(--c)}.sum small{display:block;font-size:12px;font-weight:400;letter-spacing:0;text-transform:none}
+.sum div:nth-child(2){--c:var(--gd)}.sum div:nth-child(3){--c:var(--or)}.sum div:nth-child(4){--c:var(--pu)}.sum div:nth-child(5){--c:var(--cy)}.sum div:nth-child(6){--c:#e11d74}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.tile{text-align:left;background:var(--w);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:10px 12px;cursor:pointer;font:inherit;color:inherit}
+.tile.ok{border-top-color:var(--grn)}.tile.warn{border-top-color:var(--or)}.tile.none{box-shadow:none;border-style:dashed;border-top-style:solid;color:var(--mut)}
+.tile b{font-size:16px}.tile .st{font-size:12px;color:var(--mut);margin:2px 0 6px}
+.tile .n{display:flex;gap:14px;font-size:13px}.tile .n span b{font-size:15px}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.chip{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#fff1d6;color:#9a5b00}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+fieldset{border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:6px 10px;background:var(--w)}legend{font-size:13px;font-weight:700;padding:0 4px}
+.ch{display:inline-flex;align-items:center;gap:6px;margin:4px 14px 4px 0;font-size:14px;color:var(--ink);font-weight:500}
+.ch input{width:18px;height:18px;margin:0}
+.card{box-shadow:var(--sh);background:var(--w);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.shift{border-left:4px solid var(--grn)}output{font-weight:700;color:var(--teal)}
+.li{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:var(--w);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:6px 0;font:inherit;color:inherit;cursor:pointer}
+.li small{color:var(--mut)}.tag{font-size:11px;font-weight:700;color:var(--amb)}
+dialog{width:min(860px,96vw);max-height:92vh;padding:0;border:0;border-radius:14px;overflow:hidden}
+#dt{max-height:76vh;overflow:auto}.dact{margin:0;padding:12px 16px;border-top:1px solid var(--line);background:#fff}
+.rh{background:linear-gradient(135deg,#1565d8,#16b364);color:#fff;padding:16px 18px}.rh h3{margin:0;font-size:21px}.rh p{margin:3px 0 0;font-size:13px}
+.rb{padding:14px 18px 18px}.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.kp div{border:1px solid var(--line);border-top:3px solid var(--teal);border-radius:10px;padding:8px 10px;font-size:11px;color:var(--mut);font-weight:700;text-transform:uppercase}.kp div:nth-child(2){border-top-color:var(--gd)}.kp div:nth-child(3){border-top-color:var(--pu)}.kp div:nth-child(4){border-top-color:var(--or)}.kp b{display:block;font-size:22px;color:var(--teal);text-transform:none}
+.rs h4{margin:18px 0 8px;color:var(--teal);font-size:14px;display:flex;gap:8px;align-items:center}.rs h4 i{background:var(--teal);color:#fff;border-radius:6px;font-style:normal;font-size:12px;padding:1px 9px}.rs p{margin:12px 0 6px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:center}thead th{background:#e8f1fd;color:var(--teal)}thead small{font-weight:400;color:var(--mut)}tbody th{text-align:left;background:#f6faf8;font-weight:600}
+.bd{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px}.bd.g{background:#dcf7e7;color:#0d7a40}.bd.r{background:#fde2de;color:#b4321c}.bd.a{background:#fff1d6;color:#9a5b00}.bd.b{background:#e0ecfd;color:#1252b0}.bd.n{background:#eef2f5;color:var(--mut)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px}
+.tx{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;white-space:pre-wrap;font-size:14px}.tx small{display:block;color:var(--mut);font-weight:700;font-size:11px;text-transform:uppercase}.tx.w{background:#fff8e8;border-color:#f3d9a0}
+.b.dl{background:#fff;color:var(--red);border-color:var(--red);margin-left:auto}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+pre{white-space:pre-wrap;font:inherit;max-height:60vh;overflow:auto;margin:0 0 12px}
+.ins{position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:8;background:#fff;border:1px solid var(--line);border-left:5px solid var(--gd);border-radius:12px;box-shadow:0 6px 24px rgba(21,101,216,.22);padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;max-width:560px;margin:0 auto}.ins[hidden]{display:none}.ins img{width:40px;height:40px;border-radius:9px}.ins span{flex:1;min-width:180px;font-size:13px}.ins .b{padding:8px 14px}
+#toast{max-width:90vw;text-align:center;position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}#toast.on{opacity:1}
+.hint{font-size:13px;color:var(--mut)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header><img src="logo.png" alt="Surya Husadha"><h1>Laporan Harian Kepala Ruangan<small>Dashboard ruang rawat</small></h1><button id="pill" aria-live="polite"></button><button class="hb" id="hf">+ Isi laporan</button><button class="hb g" id="hs">Sinkron</button></header>
+<main>
+<section id="v-dash" class="on">
+ <div class="bar"><label>Tanggal<input type="date" id="dd"></label><button class="b o" id="today">Hari ini</button></div>
+ <div class="sum" id="sum"></div><div class="grid" id="grid"></div>
+</section>
+<section id="v-form"><form id="f"></form></section>
+<section id="v-riw"><div class="bar"><label>Ruang<select id="rf"></select></label><label>Dari tanggal<input type="date" id="r1"></label><label>Sampai tanggal<input type="date" id="r2"></label></div>
+ <div class="bar"><button class="b" id="rx">Unduh Excel</button><button class="b o" id="rp">Cetak / PDF</button><span class="hint" id="rn"></span></div><div id="rl"></div></section>
+<section id="v-set">
+ <h2>Sinkron ke Google Drive</h2>
+ <label>Alamat sinkron Google Drive (sudah terisi otomatis)<input id="cu" placeholder="https://script.google.com/macros/s/.../exec"></label>
+ <input id="ct" type="hidden">
+ <h2>Bawaan perangkat ini</h2>
+ <div class="row2"><label>Nama kepala ruangan<input id="ck"></label><label>Ruang<select id="cr"></select></label></div>
+ <p><button class="b" id="cs">Simpan &amp; sinkron</button></p>
+ <p class="hint" id="se"></p>
+ <p class="hint">Untuk memasang: buka menu browser lalu pilih "Tambahkan ke layar utama" / "Install app".</p>
+</section>
+</main>
+<nav><button data-v="dash" class="on">Dashboard</button><button data-v="form">Isi laporan</button><button data-v="riw">Riwayat</button><button data-v="set">Pengaturan</button></nav>
+<dialog id="dlg"><div id="dt"></div><div class="bar dact"><button class="b" id="de">Ubah</button><button class="b o" id="dc">Salin teks</button><button class="b o" id="dx">Tutup</button><button class="b dl" id="dl">Hapus</button></div></dialog>
+<div class="ins" id="ins" hidden><img src="icon-192.png" alt=""><span id="it"></span><button class="b" id="ib" hidden>Pasang</button><button class="b o" id="in">Nanti</button></div>
+<div id="toast"></div>
+<script>
+const RUANG=["Ruang Bayi","Ruang Gambuh A","Ruang Gambuh B","Ruang Gambuh C","Ruang HD","Ruang IGD","Ruang Intensif","Ruang Lantai 3","Ruang Lantai 4","Ruang OK","Ruang Poliklinik","Ruang VK"];
+const SH=[["pagi","Pagi","07.30-13.30"],["sore","Sore","13.30-19.30"],["malam","Malam","19.30-07.30"]];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const S={cfg:LS("cfg")||{url:"",token:"",kepala:"",ruang:""},local:LS("local")||{},remote:LS("remote")||{},queue:LS("queue")||[],del:LS("del")||[],err:""};
+const DEF="https://script.google.com/macros/s/AKfycbyhiLvs9_lS1H1KuMgWM95fpNw9BJr6FV_Xpe9qwt_LZyCrSjiiF9BafGOeXcDAS8U24Q/exec";if(!S.cfg.custom)S.cfg.url=DEF;
+const persist=()=>["cfg","local","remote","queue","del"].forEach(k=>localStorage.setItem(k,JSON.stringify(S[k])));
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const tglID=t=>new Date(t+"T00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const v=x=>x===undefined||x===""||x===null?"-":x;
+const toast=m=>{const t=$("#toast");t.textContent=m;t.className="on";setTimeout(()=>t.className="",Math.max(2400,m.length*70))};
+const all=()=>{const m={...S.remote};for(const k in S.local)if(!m[k]||(S.local[k].ts||0)>=(m[k].ts||0))m[k]=S.local[k];S.del.forEach(k=>delete m[k]);return m};
+
+/* ---------- Form ---------- */
+const N=(n,l)=>`<label>${l}<input type="number" min="0" inputmode="numeric" name="${n}"></label>`;
+const T=(n,l,x="")=>`<label>${l}<input name="${n}" ${x}></label>`;
+const A=(n,l)=>`<label>${l}<textarea name="${n}" rows="3"></textarea></label>`;
+const R=(n,l,o)=>`<fieldset><legend>${l}</legend>${o.map(x=>`<label class="ch"><input type="radio" name="${n}" value="${x}">${x}</label>`).join("")}</fieldset>`;
+const ST=["Ideal","Kurang Tenaga","Berlebih"];
+function buildForm(){
+ $("#f").innerHTML=`<h2>Identitas</h2><div class="row2">${T("tanggal","Hari / Tanggal",'type="date" required')}${T("kepala","Nama Kepala Ruangan",'required')}
+ <label>Ruang Rawat Inap<select name="ruang" required>${RUANG.map(r=>`<option>${r}</option>`).join("")}</select></label>
+ ${T("metode","Metode Asuhan Keperawatan",'list="mt"')}</div><datalist id="mt"><option>Tim<option>Primer<option>Fungsional<option>Modular</datalist>
+ <h2>I. Data situasional &amp; ketenagaan</h2><b>1. Sensus mutasi pasien</b>
+ ${SH.map(([k,l,t])=>`<div class="card shift"><b>${l}</b> <span class="hint">(${t})</span><div class="row2">${N(k+".masuk","Pasien masuk baru")}${N(k+".pulang","Pulang (BPL/APS/Meninggal)")}${N(k+".rujuk","Pasien rujuk")}${N(k+".total","Total pasien akhir shift")}${N(k+".tt","Kapasitas TT")}</div><p>BOR: <output id="bor-${k}">-</output></p></div>`).join("")}
+ <b>2. Klasifikasi tingkat ketergantungan</b><div class="row2">${N("kg.minimal","Minimal care")}${N("kg.partial","Partial care")}${N("kg.total","Total care")}</div>
+ <b>3. Kecukupan tenaga</b>
+ ${SH.map(([k,l])=>`<div class="card shift"><b>Dinas ${l}</b><div class="row2">${N("tn."+k+".ketua","PPJA / Ketua tim")}${N("tn."+k+".pelaksana","Perawat pelaksana")}</div>${R("tn."+k+".status","Status ketenagaan",ST)}${T("tn."+k+".ket","Keterangan")}</div>`).join("")}
+ <h2>II. Fungsi manajemen kepala ruangan</h2>
+ ${[["planning","Planning (perencanaan)"],["organizing","Organizing (pengorganisasian)"],["directing","Directing (pengarahan)"],["controlling","Controlling (pengawasan dan audit)"],["evaluating","Evaluating (evaluasi)"]].map(([k,l])=>A("mj."+k,l+" - kegiatan")).join("")}
+ <h2>III. Monitoring sasaran keselamatan pasien</h2>
+ ${R("skp.s1","SKP 1 Identifikasi pasien",["100%","<100%"])}${R("skp.s2","SKP 2 Komunikasi efektif",["Ya","Tidak"])}${R("skp.s3","SKP 3 High-alert medications",["Ya","Tidak"])}${R("skp.s5","SKP 5 Pencegahan infeksi / HAIs",["Patuh","Cukup","Kurang"])}${R("skp.s6","SKP 6 Risiko jatuh",["Terpasang","Tidak Ada Pasien Risiko"])}
+ <h2>IV. Masalah khusus &amp; rencana tindak lanjut</h2>${A("masalah","Masalah klinis / manajerial")}${A("rtl","Rencana tindak lanjut (RTL)")}
+ <h2>V. Fasilitas alkes dan non alkes</h2>
+ <div class="card"><b>Alkes</b>${A("alkes.kondisi","Kondisi")}${A("alkes.masalah","Masalah")}</div>
+ <div class="card"><b>Non alkes</b>${A("nonalkes.kondisi","Kondisi")}${A("nonalkes.masalah","Masalah")}</div>
+ <p><button class="b" type="submit">Simpan laporan</button> <button class="b o" type="button" id="rs">Kosongkan</button></p>`;
+ $("#rs").onclick=()=>fillForm({});
+ $("#f").oninput=calcBor;
+}
+const setP=(o,p,x)=>{const a=p.split(".");a.slice(0,-1).forEach(k=>o=o[k]=o[k]||{});o[a.pop()]=x};
+const getP=(o,p)=>p.split(".").reduce((a,k)=>a&&a[k],o);
+function calcBor(){SH.forEach(([k])=>{const t=+$(`[name="${k}.total"]`).value,c=+$(`[name="${k}.tt"]`).value;$("#bor-"+k).textContent=c>0&&$(`[name="${k}.total"]`).value!==""?Math.round(t/c*100)+"%":"-"})}
+function collect(){const r={};$$("#f [name]").forEach(e=>{if(e.type==="radio"){if(e.checked)setP(r,e.name,e.value)}else if(e.value!=="")setP(r,e.name,e.type==="number"?+e.value:e.value.trim())});
+ SH.forEach(([k])=>{const x=(r[k]=r[k]||{});if(x.tt>0&&x.total!==undefined)x.bor=Math.round(x.total/x.tt*100)});r.ts=Date.now();return r}
+function fillForm(r){$$("#f [name]").forEach(e=>{const x=getP(r,e.name);if(e.type==="radio")e.checked=x===e.value;else e.value=x??""});
+ if(!r.tanggal)$('[name="tanggal"]').value=$("#dd").value;if(!r.kepala)$('[name="kepala"]').value=S.cfg.kepala||"";if(!r.ruang)$('[name="ruang"]').value=S.cfg.ruang||RUANG[0];calcBor()}
+function openForm(r){go("form");fillForm(r||{});scrollTo(0,0)}
+
+/* ---------- Ringkasan & teks ---------- */
+function last(r){for(const k of ["malam","sore","pagi"])if(r[k]&&r[k].total!==undefined)return r[k];return {}}
+function ring(r){const l=last(r),st=SH.map(([k])=>getP(r,"tn."+k+".status")).filter(Boolean);return{pasien:l.total??"",bor:l.bor??"",tenaga:st.includes("Kurang Tenaga")?"Kurang Tenaga":st.length?"Ideal/Berlebih":""}}
+function flags(r){const f=[],k=r.skp||{};if(ring(r).tenaga==="Kurang Tenaga")f.push("Kurang tenaga");
+ if(k.s1==="<100%"||k.s2==="Tidak"||k.s3==="Tidak"||k.s5==="Cukup"||k.s5==="Kurang")f.push("SKP");
+ if(r.masalah)f.push("Masalah");if(getP(r,"alkes.masalah")||getP(r,"nonalkes.masalah"))f.push("Alkes/Non alkes");return f}
+function toText(r){const L=[],P=x=>L.push(x),m=r.mj||{},k=r.skp||{};
+ P("# LAPORAN HARIAN KEPALA RUANGAN");P("RSU SURYA HUSADHA");P("Hari / Tanggal: "+tglID(r.tanggal));P("Nama Kepala Ruangan: "+v(r.kepala));P("Ruang Rawat Inap: "+r.ruang);P("Metode Asuhan Keperawatan: "+v(r.metode));
+ P("# I. DATA SITUASIONAL & MANAJEMEN KETENAGAAN (STAFFING)");P("1. Sensus Mutasi Pasien");
+ SH.forEach(([s,l,t])=>{const x=r[s]||{};P(`${l} (${t})`);P(`- Pasien masuk baru: ${v(x.masuk)} orang`);P(`- Pasien pulang (BPL/APS/Meninggal): ${v(x.pulang)} orang`);P(`- Pasien rujuk: ${v(x.rujuk)} orang`);P(`- Total pasien akhir shift: ${v(x.total)} orang`);P(`- Kapasitas TT / BOR: ${v(x.tt)} TT / ${v(x.bor)} %`)});
+ const g=r.kg||{};P("2. Klasifikasi Tingkat Ketergantungan Pasien");P(`- Minimal care: ${v(g.minimal)} orang`);P(`- Partial care: ${v(g.partial)} orang`);P(`- Total care: ${v(g.total)} orang`);
+ P("3. Kecukupan Tenaga (Rasio Ketenagaan)");SH.forEach(([s,l])=>{const x=(r.tn||{})[s]||{};P(`Dinas ${l}: Ketua tim ${v(x.ketua)} orang, Perawat pelaksana ${v(x.pelaksana)} orang`);P(`- Status: ${v(x.status)}`);P(`- Keterangan: ${v(x.ket)}`)});
+ P("# II. IMPLEMENTASI FUNGSI MANAJEMEN KEPALA RUANGAN");[["planning","PLANNING"],["organizing","ORGANIZING"],["directing","DIRECTING"],["controlling","CONTROLLING"],["evaluating","EVALUATING"]].forEach(([a,b])=>{P(b);P("Kegiatan: "+v(m[a]))});
+ P("# III. MONITORING SASARAN KESELAMATAN PASIEN (SKP)");P("SKP 1 Identifikasi Pasien: "+v(k.s1));P("SKP 2 Komunikasi Efektif: "+v(k.s2));P("SKP 3 High-Alert Medications: "+v(k.s3));P("SKP 5 Pencegahan Infeksi/HAIs: "+v(k.s5));P("SKP 6 Risiko Jatuh: "+v(k.s6));
+ P("# IV. MASALAH KHUSUS & RENCANA TINDAK LANJUT (RTL)");P("Masalah Klinis/Manajerial: "+v(r.masalah));P("RTL: "+v(r.rtl));
+ P("# V. LAPORAN FASILITAS ALKES DAN NONALKES");P("ALKES - Kondisi: "+v(getP(r,"alkes.kondisi")));P("ALKES - Masalah: "+v(getP(r,"alkes.masalah")));P("NON ALKES - Kondisi: "+v(getP(r,"nonalkes.kondisi")));P("NON ALKES - Masalah: "+v(getP(r,"nonalkes.masalah")));
+ return L.join("\n")}
+
+/* ---------- Dashboard ---------- */
+function renderDash(){const d=$("#dd").value,M=all(),rs=RUANG.map(n=>M[d+"|"+n]).filter(Boolean);
+ const sum=f=>rs.reduce((a,r)=>a+(+f(r)||0),0),bors=rs.map(r=>last(r).bor).filter(x=>x!==undefined);
+ $("#sum").innerHTML=[["Sudah lapor",rs.length+" / "+RUANG.length,"ruang hari ini"],["Total pasien",sum(r=>last(r).total),"akhir shift terakhir"],["Rata-rata BOR",bors.length?Math.round(bors.reduce((a,b)=>a+b,0)/bors.length)+"%":"-","ruang yang lapor"],["Ketergantungan",[sum(r=>r.kg?.minimal),sum(r=>r.kg?.partial),sum(r=>r.kg?.total)].join("/"),"minimal / partial / total"],["Kurang tenaga",rs.filter(r=>ring(r).tenaga==="Kurang Tenaga").length,"ruang"],["Perlu perhatian",rs.filter(r=>flags(r).length).length,"ruang"]].map(([a,b,c])=>`<div>${a}<b>${b}</b><small>${c}</small></div>`).join("");
+ $("#grid").innerHTML=RUANG.map(n=>{const r=M[d+"|"+n];if(!r)return`<button class="tile none" data-k="${esc(d+"|"+n)}"><b>${n}</b><div class="st">Belum ada laporan</div><span class="hint">Ketuk untuk mengisi</span></button>`;
+  const f=flags(r),l=last(r);return`<button class="tile ${f.length?"warn":"ok"}" data-k="${esc(d+"|"+n)}"><b>${n}</b><div class="st">${esc(v(r.kepala))}${S.queue.includes(d+"|"+n)?" · belum terkirim":""}</div><div class="n"><span><b>${v(l.total)}</b> pasien</span><span>BOR <b>${v(l.bor)}${l.bor!==undefined?"%":""}</b></span></div><div class="chips">${f.map(x=>`<span class="chip">${x}</span>`).join("")}</div></button>`}).join("")}
+$("#grid").onclick=e=>{const t=e.target.closest(".tile");if(!t)return;const k=t.dataset.k,r=all()[k];if(r)show(r);else{const[tg,ru]=k.split("|");openForm({tanggal:tg,ruang:ru})}};
+
+/* ---------- Tampilan laporan ---------- */
+const BC={"Ideal":"g","Berlebih":"b","Kurang Tenaga":"r","100%":"g","<100%":"r","Ya":"g","Tidak":"r","Patuh":"g","Cukup":"a","Kurang":"r","Terpasang":"g","Tidak Ada Pasien Risiko":"b"};
+const bd=x=>x?`<span class="bd ${BC[x]||"n"}">${esc(x)}</span>`:"-";
+const num=(x,u="")=>x===undefined||x===""?"-":x+u;
+const tbl=(h,rows)=>`<table><thead><tr><th></th>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map(([a,...b])=>`<tr><th>${a}</th>${b.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+const tx=(l,x,w)=>`<div class="tx${w&&x?" w":""}"><small>${l}</small>${x?esc(x):"-"}</div>`;
+const sec=(n,t,b)=>`<div class="rs"><h4><i>${n}</i>${t}</h4>${b}</div>`;
+function renderReport(r){
+ const q=r.kg||{},k=r.skp||{},m=r.mj||{},tn=r.tn||{},l=last(r),f=flags(r),al=r.alkes||{},na=r.nonalkes||{};
+ const sh=SH.map(([s])=>r[s]||{}),tt=SH.map(([s])=>tn[s]||{}),hd=SH.map(([,a,t])=>`${a}<br><small>${t}</small>`),hd2=SH.map(([,a])=>"Dinas "+a);
+ const R=(a,fn)=>[a,...sh.map(fn)],T=(a,fn)=>[a,...tt.map(fn)];
+ return `<div class="rh"><h3>${esc(r.ruang)}</h3><p>${tglID(r.tanggal)} · Kepala ruangan: ${esc(v(r.kepala))} · Metode: ${esc(v(r.metode))}</p></div><div class="rb">
+ <div class="kp"><div>Pasien akhir shift<b>${num(l.total)}</b></div><div>BOR<b>${num(l.bor,"%")}</b></div><div>Ketergantungan<b>${num(q.minimal)}/${num(q.partial)}/${num(q.total)}</b></div><div>Catatan<b>${f.length?f.map(x=>`<span class="bd a">${x}</span>`).join(" "):'<span class="bd g">Tidak ada</span>'}</b></div></div>`+
+ sec("I","Data Situasional &amp; Manajemen Ketenagaan",
+  `<b>1. Sensus mutasi pasien</b>`+tbl(hd,[R("Pasien masuk baru",x=>num(x.masuk)),R("Pulang (BPL/APS/Meninggal)",x=>num(x.pulang)),R("Pasien rujuk",x=>num(x.rujuk)),R("<b>Total pasien akhir shift</b>",x=>`<b>${num(x.total)}</b>`),R("Kapasitas TT",x=>num(x.tt)),R("BOR",x=>num(x.bor,"%"))])+
+  `<p><b>2. Tingkat ketergantungan pasien</b></p>`+tbl(["Minimal care","Partial care","Total care"],[["Jumlah (orang)",num(q.minimal),num(q.partial),num(q.total)]])+
+  `<p><b>3. Kecukupan tenaga</b></p>`+tbl(hd2,[T("PPJA / Ketua tim",x=>num(x.ketua)),T("Perawat pelaksana",x=>num(x.pelaksana)),T("Status",x=>bd(x.status)),T("Keterangan",x=>esc(v(x.ket)))]))+
+ sec("II","Implementasi Fungsi Manajemen",[["planning","Planning (Perencanaan)"],["organizing","Organizing (Pengorganisasian)"],["directing","Directing (Pengarahan)"],["controlling","Controlling (Pengawasan dan Audit)"],["evaluating","Evaluating (Evaluasi)"]].map(([a,b])=>tx(b,m[a])).join(""))+
+ sec("III","Monitoring Sasaran Keselamatan Pasien",`<div class="kv">${[["SKP 1 · Identifikasi pasien",k.s1],["SKP 2 · Komunikasi efektif",k.s2],["SKP 3 · High-alert medications",k.s3],["SKP 5 · Pencegahan infeksi / HAIs",k.s5],["SKP 6 · Risiko jatuh",k.s6]].map(([a,b])=>`<span>${a}</span>${bd(b)}`).join("")}</div>`)+
+ sec("IV","Masalah Khusus &amp; Rencana Tindak Lanjut",tx("Masalah klinis / manajerial",r.masalah,1)+tx("Rencana tindak lanjut (RTL)",r.rtl))+
+ sec("V","Fasilitas Alkes dan Non Alkes",`<div class="two"><div><b>Alkes</b>${tx("Kondisi",al.kondisi)}${tx("Masalah",al.masalah,1)}</div><div><b>Non alkes</b>${tx("Kondisi",na.kondisi)}${tx("Masalah",na.masalah,1)}</div></div>`)+`</div>`}
+
+/* ---------- Riwayat & detail ---------- */
+const pick=()=>{const f=$("#rf").value,d1=$("#r1").value,d2=$("#r2").value;return Object.values(all()).filter(r=>(!f||r.ruang===f)&&(!d1||r.tanggal>=d1)&&(!d2||r.tanggal<=d2))};
+const asc=(a,b)=>a.tanggal.localeCompare(b.tanggal)||RUANG.indexOf(a.ruang)-RUANG.indexOf(b.ruang);
+function renderRiw(){const rs=pick().sort((a,b)=>-asc(a,b)||RUANG.indexOf(a.ruang)-RUANG.indexOf(b.ruang));$("#rn").textContent=rs.length+" laporan";
+ $("#rl").innerHTML=rs.length?rs.map(r=>`<button class="li" data-k="${esc(r.tanggal+"|"+r.ruang)}"><span><b>${esc(r.ruang)}</b><br><small>${tglID(r.tanggal)} · ${esc(v(r.kepala))}</small></span>${S.queue.includes(r.tanggal+"|"+r.ruang)?'<span class="tag">Menunggu kirim</span>':""}</button>`).join(""):'<p class="hint">Belum ada laporan.</p>'}
+$("#rl").onclick=e=>{const t=e.target.closest(".li");if(t)show(all()[t.dataset.k])};
+let cur=null;const show=r=>{cur=r;$("#dt").innerHTML=renderReport(r);$("#dt").scrollTop=0;$("#dlg").showModal()};
+function delRep(r){const k=r.tanggal+"|"+r.ruang;if(!confirm("Hapus laporan "+r.ruang+" tanggal "+tglID(r.tanggal)+"?\nLaporan juga dihapus dari Google Sheet."))return;
+ delete S.local[k];delete S.remote[k];S.queue=S.queue.filter(x=>x!==k);if(!S.del.includes(k))S.del.push(k);persist();$("#dlg").close();render();toast("Laporan dihapus");sync()}
+$("#dl").onclick=()=>delRep(cur);
+$("#dx").onclick=()=>$("#dlg").close();$("#de").onclick=()=>{$("#dlg").close();openForm(cur)};
+$("#dc").onclick=()=>navigator.clipboard.writeText(toText(cur).replace(/^# /gm,"")).then(()=>toast("Teks disalin"));
+
+/* ---------- Unduh Excel & cetak ---------- */
+function XC(){const c=[],a=(g,l,f)=>c.push({g,l,f}),P=p=>r=>getP(r,p);
+ a("Identitas","Hari / Tanggal",r=>r.tanggal);a("Identitas","Ruang Rawat Inap",r=>r.ruang);a("Identitas","Nama Kepala Ruangan",r=>r.kepala);a("Identitas","Metode Asuhan Keperawatan",r=>r.metode);
+ SH.forEach(([k,L])=>[["masuk","Pasien Masuk Baru (orang)"],["pulang","Pasien Pulang BPL/APS/Meninggal (orang)"],["rujuk","Pasien Rujuk (orang)"],["total","Total Pasien Akhir Shift (orang)"],["tt","Kapasitas TT"],["bor","BOR (%)"]].forEach(([f,t])=>a("I.1 Sensus Mutasi Pasien - "+L,t,P(k+"."+f))));
+ [["minimal","Minimal Care"],["partial","Partial Care"],["total","Total Care"]].forEach(([f,t])=>a("I.2 Ketergantungan Pasien (orang)",t,P("kg."+f)));
+ SH.forEach(([k,L])=>[["ketua","PPJA / Ketua Tim (orang)"],["pelaksana","Perawat Pelaksana (orang)"],["status","Status Ketenagaan"],["ket","Keterangan"]].forEach(([f,t])=>a("I.3 Kecukupan Tenaga - Dinas "+L,t,P("tn."+k+"."+f))));
+ [["planning","Planning (Perencanaan)"],["organizing","Organizing (Pengorganisasian)"],["directing","Directing (Pengarahan)"],["controlling","Controlling (Pengawasan dan Audit)"],["evaluating","Evaluating (Evaluasi)"]].forEach(([f,t])=>a("II. Fungsi Manajemen - Kegiatan",t,P("mj."+f)));
+ [["s1","SKP 1 Identifikasi Pasien"],["s2","SKP 2 Komunikasi Efektif"],["s3","SKP 3 High-Alert Medications"],["s5","SKP 5 Pencegahan Infeksi/HAIs"],["s6","SKP 6 Risiko Jatuh"]].forEach(([f,t])=>a("III. Sasaran Keselamatan Pasien (SKP)",t,P("skp."+f)));
+ a("IV. Masalah Khusus & RTL","Masalah Klinis/Manajerial",r=>r.masalah);a("IV. Masalah Khusus & RTL","Rencana Tindak Lanjut (RTL)",r=>r.rtl);
+ [["alkes.kondisi","Alkes - Kondisi"],["alkes.masalah","Alkes - Masalah"],["nonalkes.kondisi","Non Alkes - Kondisi"],["nonalkes.masalah","Non Alkes - Masalah"]].forEach(([p,t])=>a("V. Fasilitas Alkes dan Non Alkes",t,P(p)));
+ a("Sistem","Diperbarui",r=>r.ts?new Date(r.ts).toLocaleString("id-ID"):"");return c}
+const colL=n=>{let s="";n++;while(n){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
+const xe=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,"");
+const xc=(ci,ri,val,s)=>{const ref=colL(ci)+ri;if(val===undefined||val===null||val==="")return`<c r="${ref}" s="${s}"/>`;return typeof val==="number"?`<c r="${ref}" s="${s}"><v>${val}</v></c>`:`<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xe(val)}</t></is></c>`};
+function crc32(b){let t=crc32.t,c;if(!t){t=crc32.t=[];for(let n=0;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}}let r=-1;for(let i=0;i<b.length;i++)r=t[(r^b[i])&255]^(r>>>8);return(r^-1)>>>0}
+function zip(files,type){const en=new TextEncoder(),parts=[],cen=[],u16=n=>[n&255,n>>8&255],u32=n=>[n&255,n>>8&255,n>>16&255,n>>>24&255];let off=0;
+ for(const[name,str]of files){const nb=en.encode(name),d=en.encode(str),c=crc32(d);
+  const lh=[0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(c),...u32(d.length),...u32(d.length),...u16(nb.length),...u16(0)];
+  parts.push(new Uint8Array(lh),nb,d);
+  cen.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(c),...u32(d.length),...u32(d.length),...u16(nb.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nb);
+  off+=lh.length+nb.length+d.length}
+ const cs=cen.reduce((a,x)=>a+x.length,0);
+ return new Blob([...parts,...cen,new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(cs),...u32(off),0,0])],{type})}
+function makeXlsx(rs){const c=XC(),n=c.length,mg=[];let r1="",r2="",i=0,gi=0;
+ while(i<n){let j=i;while(j+1<n&&c[j+1].g===c[i].g)j++;
+  for(let k=i;k<=j;k++){r1+=xc(k,1,k===i?c[i].g:"",gi%2?2:1);r2+=xc(k,2,c[k].l,gi%2?4:3)}
+  if(j>i)mg.push(`<mergeCell ref="${colL(i)}1:${colL(j)}1"/>`);i=j+1;gi++}
+ let body=`<row r="1" ht="22" customHeight="1">${r1}</row><row r="2" ht="54" customHeight="1">${r2}</row>`;
+ rs.forEach((r,x)=>{body+=`<row r="${x+3}">${c.map((q,k)=>xc(k,x+3,q.f(r),5)).join("")}</row>`});
+ const cols=c.map((q,k)=>`<col min="${k+1}" max="${k+1}" width="${/^(II\.|IV\.|V\.)/.test(q.g)||q.l==="Keterangan"?42:q.l==="Nama Kepala Ruangan"?24:q.l==="Ruang Rawat Inap"?20:15}" customWidth="1"/>`).join("");
+ const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',NS='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',RL="http://schemas.openxmlformats.org/officeDocument/2006/relationships",PR="http://schemas.openxmlformats.org/package/2006/relationships";
+ const al='<alignment horizontal="center" vertical="center" wrapText="1"/>',xf=(f,fl,a,b)=>`<xf numFmtId="0" fontId="${f}" fillId="${fl}" borderId="${b}" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1">${a}</xf>`,fill=x=>`<fill><patternFill patternType="solid"><fgColor rgb="FF${x}"/></patternFill></fill>`,bo=s=>`<${s} style="thin"><color rgb="FFC8D4E0"/></${s}>`;
+ const styles=`${X}<styleSheet ${NS}><fonts count="3"><font><sz val="10"/><name val="Calibri"/></font><font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="10"/><name val="Calibri"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>${fill("1565D8")}${fill("16B364")}${fill("DBE8FB")}${fill("D9F4E5")}</fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border>${bo("left")}${bo("right")}${bo("top")}${bo("bottom")}<diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>${xf(1,2,al,1)}${xf(1,3,al,1)}${xf(2,4,al,1)}${xf(2,5,al,1)}${xf(0,0,'<alignment vertical="top" wrapText="1"/>',1)}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+ const sheet=`${X}<worksheet ${NS}><sheetViews><sheetView workbookViewId="0"><pane xSplit="3" ySplit="2" topLeftCell="D3" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><cols>${cols}</cols><sheetData>${body}</sheetData><mergeCells count="${mg.length}">${mg.join("")}</mergeCells></worksheet>`;
+ const CT="application/vnd.openxmlformats-officedocument.spreadsheetml.";
+ return zip([["[Content_Types].xml",`${X}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="${CT}sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="${CT}worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="${CT}styles+xml"/></Types>`],
+ ["_rels/.rels",`${X}<Relationships xmlns="${PR}"><Relationship Id="rId1" Type="${RL}/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+ ["xl/workbook.xml",`${X}<workbook ${NS} xmlns:r="${RL}"><sheets><sheet name="Rekap Laporan" sheetId="1" r:id="rId1"/></sheets></workbook>`],
+ ["xl/_rels/workbook.xml.rels",`${X}<Relationships xmlns="${PR}"><Relationship Id="rId1" Type="${RL}/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="${RL}/styles" Target="styles.xml"/></Relationships>`],
+ ["xl/styles.xml",styles],["xl/worksheets/sheet1.xml",sheet]],CT+"sheet")}
+function printRep(rs){const w=open("","_blank");if(!w)return toast("Izinkan pop-up agar bisa mencetak");
+ w.document.write('<!doctype html><meta charset="utf-8"><title>Laporan Harian Kepala Ruangan</title><style>'+document.querySelector("style").textContent+'*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{padding:0}@page{margin:12mm}</style>'+rs.map(r=>'<div style="page-break-after:always">'+renderReport(r)+'</div>').join(""));w.document.close();setTimeout(()=>w.print(),500)}
+$("#rx").onclick=()=>{const rs=pick().sort(asc);if(!rs.length)return toast("Tidak ada laporan pada filter ini");
+ const a=document.createElement("a");a.href=URL.createObjectURL(makeXlsx(rs));a.download=`Laporan_${($("#rf").value||"Semua_ruang").replace(/\s+/g,"_")}_${$("#r1").value||"awal"}_sd_${$("#r2").value||"akhir"}.xlsx`;a.click();toast("Mengunduh "+rs.length+" laporan")};
+$("#rp").onclick=()=>{const rs=pick().sort(asc);if(!rs.length)return toast("Tidak ada laporan pada filter ini");printRep(rs)};
+
+/* ---------- Sinkron ke Drive ---------- */
+async function sync(){pill();if(!S.cfg.url||!navigator.onLine)return;
+ try{for(const k of [...S.del]){const j=await(await fetch(S.cfg.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:S.cfg.token,action:"delete",key:k})})).json();if(!j.ok)throw j.error;S.del=S.del.filter(x=>x!==k);persist()}
+  for(const k of [...S.queue]){const r=S.local[k];if(r){const j=await(await fetch(S.cfg.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:S.cfg.token,report:{...r,ringkas:ring(r),teks:toText(r)}})})).json();if(!j.ok)throw j.error}S.queue=S.queue.filter(x=>x!==k);persist()}
+  const from=iso(new Date(Date.now()-400*864e5)),j=await(await fetch(`${S.cfg.url}?action=list&from=${from}&token=${encodeURIComponent(S.cfg.token)}`)).json();if(!j.ok)throw j.error;
+  S.remote={};j.reports.forEach(r=>S.remote[r.tanggal+"|"+r.ruang]=r);S.err="";persist()}
+ catch(e){S.err=typeof e==="string"?e:e instanceof SyntaxError?"Apps Script membalas galat. Pastikan script dibuka dari Google Sheet (Extensions > Apps Script) lalu deploy ulang":"Tidak bisa terhubung. Di Deploy, Who has access harus Anyone"}
+ pill();render();if(S.err)toast("Gagal sinkron: "+S.err)}
+function pill(){const p=$("#pill");let t="Tersinkron ke Drive",c="";
+ if(!S.cfg.url){t="Drive belum diatur";c="wait"}else if(S.err){t="Gagal sinkron";c="bad"}else if(S.queue.length+S.del.length){t=(S.queue.length+S.del.length)+" menunggu kirim";c="wait"}else if(!navigator.onLine)t="Offline";
+ p.textContent=t;p.className=c;$("#se").textContent=S.err?"Galat: "+S.err:""}
+$("#pill").onclick=()=>S.cfg.url?sync():go("set");$("#hs").onclick=$("#pill").onclick;$("#hf").onclick=()=>{go("form");if(!$("#f [name=kepala]").value)fillForm(collect())};
+
+/* ---------- Navigasi & init ---------- */
+const render=()=>{renderDash();renderRiw()};
+function go(v){$$("section").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));$$("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));if(v!=="form")render()}
+$$("nav button").forEach(b=>b.onclick=()=>{go(b.dataset.v);if(b.dataset.v==="form"&&!$("#f [name=kepala]").value)fillForm(collect())});
+$("#f").onsubmit=e=>{e.preventDefault();const r=collect(),k=r.tanggal+"|"+r.ruang;S.local[k]=r;S.del=S.del.filter(x=>x!==k);if(!S.queue.includes(k))S.queue.push(k);
+ if(r.kepala){S.cfg.kepala=r.kepala;S.cfg.ruang=r.ruang}persist();$("#dd").value=r.tanggal;toast("Laporan tersimpan");go("dash");sync()};
+$("#dd").value=iso(new Date());$("#dd").onchange=renderDash;$("#today").onclick=()=>{$("#dd").value=iso(new Date());renderDash()};
+$("#rf").innerHTML='<option value="">Semua ruang</option>'+RUANG.map(r=>`<option>${r}</option>`).join("");$("#rf").onchange=renderRiw;{const n=new Date();$("#r1").value=iso(new Date(n.getFullYear(),n.getMonth(),1));$("#r2").value=iso(n)}$("#r1").onchange=$("#r2").onchange=renderRiw;
+$("#cr").innerHTML=RUANG.map(r=>`<option>${r}</option>`).join("");
+$("#cu").value=S.cfg.url;$("#ct").value=S.cfg.token;$("#ck").value=S.cfg.kepala||"";$("#cr").value=S.cfg.ruang||RUANG[0];
+$("#cs").onclick=()=>{S.cfg={custom:$("#cu").value.trim()!==DEF,url:$("#cu").value.trim(),token:$("#ct").value.trim(),kepala:$("#ck").value.trim(),ruang:$("#cr").value};S.err="";persist();toast("Pengaturan disimpan");sync()};
+let ip=null;const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+const insShow=t=>{if(standalone)return;$("#it").textContent=t;$("#ins").hidden=false};
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;$("#ib").hidden=false;insShow("Pasang aplikasi ini di layar utama agar bisa dibuka seperti aplikasi biasa.")});
+addEventListener("appinstalled",()=>{ip=null;$("#ins").hidden=true;toast("Aplikasi terpasang")});
+$("#ib").onclick=async()=>{if(!ip)return;ip.prompt();await ip.userChoice;ip=null;$("#ins").hidden=true};
+$("#in").onclick=()=>{$("#ins").hidden=true};
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone)insShow('Di iPhone/iPad: ketuk tombol Bagikan lalu pilih "Tambah ke Layar Utama".');
+addEventListener("online",sync);buildForm();fillForm({});render();sync();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
