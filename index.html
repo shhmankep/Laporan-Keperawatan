@@ -129,7 +129,7 @@ function secJ(f){const D=J[f];let t=`<h2>I. Data situasional &amp; ketenagaan</h
  return t+`</tbody></table></div>`+secTn(D)}
 const ptabF=(b,names)=>`<div class="sc"><table class="ft"><thead><tr><th rowspan="2"></th>${PP.map(([,l])=>`<th colspan="2">${l}</th>`).join("")}</tr><tr>${PP.map(()=>"<th>P</th><th>S</th>").join("")}</tr></thead><tbody>${names.map((n,i)=>`<tr class="sb"><th>${n}</th>${PP.map(([k])=>["p","s"].map(s=>`<td>${nin(`${b}${i}.${k}.${s}`)}</td>`).join("")).join("")}</tr>`).join("")}</tbody></table></div>`;
 const secPoli=()=>`<h2>I. Data situasional &amp; ketenagaan</h2><p class="hint">P = Pagi, S = Sore. Geser tabel ke samping untuk melihat semua kolom.</p><b>Spesialis</b>${ptabF("sp.s",SP)}<p><b>Tempat praktek</b></p>${ptabF("tp.t",TP)}<p>${N("pm.echo","Penunjang medis: ECHO")}</p>`+secTn(J.poli);
-const secIKP=()=>`<h2>III. Monitoring insiden keselamatan pasien (IKP)</h2><div class="row2" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">${IKPS.map(([k,l])=>`<div class="card"><b>${l}</b>${N("ikp."+k,"Jumlah kejadian")}${A("ikpd."+k,"Deskripsi")}</div>`).join("")}</div><p class="hint" style="margin:10px 0 4px">Tuliskan SKP yang menjadi insiden</p>${SKPN.map(([k,l])=>T("skpi."+k,l)).join("")}`;
+const secIKP=()=>`<h2>III. Monitoring insiden keselamatan pasien (IKP)</h2>${IKPS.map(([k,l])=>`<div class="card"><b>${l}</b><div style="max-width:240px">${N("ikp."+k,"Jumlah kejadian")}</div><label>Deskripsi<textarea class="ag" name="ikpd.${k}" rows="5" style="min-height:130px;font-size:15px;line-height:1.5" placeholder="Tuliskan kronologi atau deskripsi kejadian"></textarea></label></div>`).join("")}<p class="hint" style="margin:10px 0 4px">Tuliskan SKP yang menjadi insiden</p>${SKPN.map(([k,l])=>T("skpi."+k,l)).join("")}`;
 function buildForm(f="ri"){curFmt=f;const ri=f==="ri";
  $("#f").innerHTML=`<h2>Identitas</h2><div class="row2">${T("tanggal","Hari / Tanggal",'type="date" required')}${T("kepala","Nama Kepala Ruangan",'required')}
  <label>${ri?"Ruang Rawat Inap":"Unit / Ruang"}<select name="ruang" required>${RUANG.map(r=>`<option>${r}</option>`).join("")}</select></label>
@@ -147,7 +147,7 @@ function buildForm(f="ri"){curFmt=f;const ri=f==="ri";
  <div class="card"><b>Non alkes</b>${A("nonalkes.kondisi","Kondisi")}${A("nonalkes.masalah","Masalah")}</div>
  <p><button class="b" type="submit">Simpan laporan</button> <button class="b o" type="button" id="rs">Kosongkan</button></p>`;
  $("#rs").onclick=()=>fillForm({});
- $("#f").oninput=calcBor;
+ $("#f").oninput=e=>{calcBor();const t=e.target;if(t.classList&&t.classList.contains("ag")){t.style.height="auto";t.style.height=Math.max(t.scrollHeight,130)+"px"}};
  $("#f").onchange=e=>{if(e.target.name==="ruang"){const d=collect();d.ruang=e.target.value;buildForm(fmtOf(d.ruang));fillForm(d)}};
 }
 const setP=(o,p,x)=>{const a=p.split(".");a.slice(0,-1).forEach(k=>o=o[k]=o[k]||{});o[a.pop()]=x};
@@ -157,7 +157,7 @@ function collect(){const r={};$$("#f [name]").forEach(e=>{if(e.type==="radio"){i
  if(curFmt==="ri")SH.forEach(([k])=>{const x=(r[k]=r[k]||{});if(x.tt>0&&x.total!==undefined)x.bor=Math.round(x.total/x.tt*100)});r.fmt=fmtOf(r.ruang);r.ts=Date.now();return r}
 function fillForm(r){const rm=r.ruang||S.cfg.ruang||RUANG[0];if(fmtOf(rm)!==curFmt)buildForm(fmtOf(rm));
  $$("#f [name]").forEach(e=>{const x=getP(r,e.name);if(e.type==="radio")e.checked=x===e.value;else e.value=x??""});
- if(!r.tanggal)$('[name="tanggal"]').value=$("#dd").value;if(!r.kepala)$('[name="kepala"]').value=S.cfg.kepala||"";if(!r.ruang)$('[name="ruang"]').value=S.cfg.ruang||RUANG[0];calcBor()}
+ if(!r.tanggal)$('[name="tanggal"]').value=$("#dd").value;if(!r.kepala)$('[name="kepala"]').value=S.cfg.kepala||"";if(!r.ruang)$('[name="ruang"]').value=S.cfg.ruang||RUANG[0];calcBor();$$("#f .ag").forEach(e=>{e.style.height="auto";e.style.height=Math.max(e.scrollHeight,130)+"px"})}
 function openForm(r){go("form");fillForm(r||{});scrollTo(0,0)}
 
 /* ---------- Ringkasan & teks ---------- */
