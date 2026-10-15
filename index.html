@@ -78,6 +78,7 @@ pre{white-space:pre-wrap;font:inherit;max-height:60vh;overflow:auto;margin:0 0 1
  <div class="row2"><label>Nama kepala ruangan<input id="ck"></label><label>Ruang<select id="cr"></select></label></div>
  <p><button class="b" id="cs">Simpan &amp; sinkron</button></p>
  <p class="hint" id="se"></p>
+ <p class="hint" id="ver"></p>
  <p class="hint">Untuk memasang: buka menu browser lalu pilih "Tambahkan ke layar utama" / "Install app".</p>
 </section>
 </main>
@@ -345,5 +346,6 @@ $("#ib").onclick=async()=>{if(!ip)return;ip.prompt();await ip.userChoice;ip=null
 $("#in").onclick=()=>{$("#ins").hidden=true};
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone)insShow('Di iPhone/iPad: ketuk tombol Bagikan lalu pilih "Tambah ke Layar Utama".');
 addEventListener("online",sync);buildForm();fillForm({});render();sync();
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+const VER="v27";$("#ver").textContent="Versi aplikasi: "+VER;
+if("serviceWorker"in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload()}});navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 </script></body></html>
