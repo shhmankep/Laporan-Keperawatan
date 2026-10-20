@@ -135,9 +135,9 @@ const rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>String(a+i)),sama=l=>l.map(x=>
 const kol=l=>{const c=Math.ceil(l.length/4),n=Math.ceil(l.length/c);return Array.from({length:c},(_,i)=>[null,sama(l.slice(i*n,i*n+n))])};
 const KMR={"Ruang Gambuh A":kol(rng(401,405)),"Ruang Gambuh B":kol(rng(301,308)),"Ruang Gambuh C":kol(rng(201,212)),
  "Ruang Lantai 3":[[null,sama(rng(301,310))],[null,sama(["311","312A","312B","312C",...rng(314,319)])],[null,sama(rng(320,329))],[null,sama(["330","331","332","334","335","336","337A","337B","338","339"])],[null,sama(rng(340,343))]],
- "Ruang Lantai 4":[[null,sama(rng(401,410))],[null,sama(["411",...rng(414,421)])],[null,sama(["422",...rng(426,434)])],[null,sama([...rng(435,442),"443A","443B"])],[null,sama(rng(445,450))]],
+ "Ruang Lantai 4":[[null,sama(rng(406,410))],[null,sama(["411",...rng(414,421)])],[null,sama(["422",...rng(426,434)])],[null,sama([...rng(435,442),"443A","443B"])],[null,sama(rng(445,450))]],
  "Ruang Intensif":[["ICU",bed(6,"ICU ")],["ICCU",bed(2,"ICCU ")],["PICU",bed(1,"PICU ")],["HCU",bed(3,"HCU ")]]};
-const KEX={"Ruang Lantai 3":rng(301,308),"Ruang Lantai 4":rng(401,405)};
+const KEX={};
 const kcount=s=>s?String(s).split(",").map(x=>x.trim()).filter(Boolean).length:0;
 const roomsOf=rm=>KMR[rm]||(S.cfg.kamar&&S.cfg.kamar[rm]?[[null,S.cfg.kamar[rm].map(x=>[x,x])]]:null);
 const parseRooms=t=>{const o=[];String(t).split(",").forEach(x=>{x=x.trim().toUpperCase();if(!x)return;const m=x.match(/^(\d+)\s*-\s*(\d+)$/);if(m){for(let i=+m[1];i<=+m[2]&&o.length<300;i++)o.push(String(i))}else o.push(x)});return[...new Set(o)]};
@@ -377,6 +377,6 @@ $("#ib").onclick=async()=>{if(!ip)return;ip.prompt();await ip.userChoice;ip=null
 $("#in").onclick=()=>{$("#ins").hidden=true};
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone)insShow('Di iPhone/iPad: ketuk tombol Bagikan lalu pilih "Tambah ke Layar Utama".');
 addEventListener("online",sync);buildForm();fillForm({});render();sync();
-const VER="v33";$("#ver").textContent="Versi aplikasi: "+VER;
+const VER="v34";$("#ver").textContent="Versi aplikasi: "+VER;
 if("serviceWorker"in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload()}});navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 </script></body></html>
