@@ -272,9 +272,9 @@ function renderReport(r){const f=fmtOf(r.ruang);
  if(f==="ri")return parts[0]+pt("I").replace("</h4>","</h4>"+pjH(r,SH.map(x=>x[0])))+pt("II")+s3+pt("IV")+pt("V");
  let s1;
  if(f==="poli")s1=`<b>Spesialis</b> <span class="hint">(P = pagi, S = sore)</span>`+ptab(r,"sp.s",SP)+`<p><b>Tempat praktek</b></p>`+ptab(r,"tp.t",TP)+tx("Penunjang medis · ECHO",getP(r,"pm.echo")===undefined?"":String(getP(r,"pm.echo")))+`<p><b>Kecukupan tenaga</b></p>`+tnT(D);
- else{const rows=[];D.it.forEach(([k,l,sub])=>{if(sub){const sr=sub.map(([sk,sl])=>[`&nbsp;&nbsp;– ${sl}`,...D.sh.map(s=>num(getP(r,`d.${k}.${sk}.${s}`)))]).filter(a=>a.slice(1).some(x=>x!=="-"));if(sr.length)rows.push([`<b>${l}</b>`,...D.sh.map(s=>`<b>${sub.reduce((a,[sk])=>a+nv(getP(r,`d.${k}.${sk}.${s}`)),0)}</b>`)],...sr)}else{const a=[l,...D.sh.map(s=>num(getP(r,`d.${k}.${s}`)))];if(a.slice(1).some(x=>x!=="-"))rows.push(a)}});
+ else{const rows=[];D.it.forEach(([k,l,sub,ket])=>{if(sub){const sr=sub.map(([sk,sl])=>[`&nbsp;&nbsp;– ${sl}`,...D.sh.map(s=>num(getP(r,`d.${k}.${sk}.${s}`)))]).filter(a=>a.slice(1).some(x=>x!=="-"));if(sr.length)rows.push([`<b>${l}</b>`,...D.sh.map(s=>`<b>${sub.reduce((a,[sk])=>a+nv(getP(r,`d.${k}.${sk}.${s}`)),0)}</b>`)],...sr)}else{const a=[l,...D.sh.map(s=>num(getP(r,`d.${k}.${s}`)))];if(ket||a.slice(1).some(x=>x!=="-"))rows.push(a)}});
   if(D.tot)rows.forEach(a=>{a.push(`<b>${a.slice(1).reduce((t,x)=>t+(+String(x).replace(/<[^>]+>/g,"")||0),0)}</b>`)});
-  const kh=D.it.filter(x=>x[3]).map(([k,l])=>D.sh.map(s=>{const t=getP(r,`dk.${k}.${s}`);return t?tx(`${l} · ${SL[s]}`,t,1):""}).join("")).join("");
+  const kh=D.it.filter(x=>x[3]).map(([k,l])=>tx(l,D.sh.map(s=>{const x=getP(r,`dk.${k}.${s}`);return x?`${SL[s]}: ${x}`:""}).filter(Boolean).join("\n"),1)).join("");
   s1=`<b>Sensus pasien dan tindakan</b> <span class="hint">(isian kosong tidak ditampilkan)</span>`+(rows.length?tbl([...D.sh.map(s=>SL[s]),...(D.tot?["Total 24 jam"]:[])],rows):'<p class="hint">Belum ada data diisi.</p>')+(kh?`<p><b>Keterangan pasien</b></p>`+kh:"")+`<p><b>Kecukupan tenaga</b></p>`+tnT(D)}
  return head+`<div class="rb">`+kpi+sec("I","Data Situasional &amp; Manajemen Ketenagaan",pjH(r,shiftsOf(D))+s1)+pt("II")+s3+pt("IV")+pt("V")}
 
@@ -382,6 +382,6 @@ $("#ib").onclick=async()=>{if(!ip)return;ip.prompt();await ip.userChoice;ip=null
 $("#in").onclick=()=>{$("#ins").hidden=true};
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone)insShow('Di iPhone/iPad: ketuk tombol Bagikan lalu pilih "Tambah ke Layar Utama".');
 addEventListener("online",sync);buildForm();fillForm({});render();sync();
-const VER="v37";$("#ver").textContent="Versi aplikasi: "+VER;
+const VER="v38";$("#ver").textContent="Versi aplikasi: "+VER;
 if("serviceWorker"in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload()}});navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 </script></body></html>
